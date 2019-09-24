@@ -1,2 +1,13 @@
 User2flower API for interacting with user table inside planthealthcare DB.
 CRUD operations exposed.
+GET all         /users2flowers/
+GET one         /users2flowers/<id>
+POST one        /users2flowers/
+PUT one         /users2flowers/<id>
+DELETE one      /users2flowers/<id>
+
+Building docker image:
+docker build -t [tag-name] https://github.com/markocrnic/user2flower.git
+
+Running docker image:
+docker run -d -p 5002:5000 [user2flower-tag-name]
