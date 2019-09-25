@@ -27,7 +27,7 @@ def getAllUsers2Flowers():
         c.close()
         conn.close()
         print(e)
-        return 'Something went wrong while fetching users with flowers.'
+        return 'Something went wrong while fetching users with flowers.', 500
 
 
 def postUsers2Flowers(request):
@@ -39,13 +39,13 @@ def postUsers2Flowers(request):
 
         c.close()
         conn.close()
-        return "New user2flower added to DB."
+        return "New user2flower added to DB.", 201
 
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while inserting user2flower to DB."
+        return "Something went wrong while inserting user2flower to DB.", 500
 
 
 def getUser2flowerByID(user2flower_id):
@@ -71,7 +71,7 @@ def getUser2flowerByID(user2flower_id):
         c.close()
         conn.close()
         print(e)
-        return "Something went while fetching user2flower by id."
+        return "Something went while fetching user2flower by id.", 500
 
 
 def putUser2flowerByID(request, user2flower_id):
@@ -84,7 +84,7 @@ def putUser2flowerByID(request, user2flower_id):
         else:
             putData = putDataCheck(request, data)
             if putData == "Something went wrong in mapping data.":
-                return "Something went wrong in mapping data."
+                return "Something went wrong in mapping data.", 500
             c.execute('UPDATE user2flower SET user2flower_id = %s, user_id = %s, flower_id = %s, date_of_inception = %s, email = %s WHERE user2flower_id = %s',(str(user2flower_id), putData[0], putData[1], putData[2], putData[3],  str(user2flower_id)))
             conn.commit()
             print("User2flower with user2flower_id " + str(user2flower_id) + " is updated.")
@@ -97,7 +97,7 @@ def putUser2flowerByID(request, user2flower_id):
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while updating user2flower."
+        return "Something went wrong while updating user2flower.", 500
 
 
 def deleteUser2flowerByID(user2flower_id):
@@ -120,7 +120,7 @@ def deleteUser2flowerByID(user2flower_id):
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while deleting user2flower"
+        return "Something went wrong while deleting user2flower", 500
 
 
 def putDataCheck(request, data):

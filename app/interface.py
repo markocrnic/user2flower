@@ -23,11 +23,11 @@ def user2flowerGlobal():
             try:
                 validated = schema.validate(request.json)
             except:
-                return 'Data is not valid.'
+                return 'Data is not valid.', 403
             pass
             return implementation.postUsers2Flowers(request)
     except:
-        return 'Something went wrong at /users2flowers/'
+        return 'Something went wrong at /users2flowers/', 500
 
 
 @app.route('/users2flowers/<int:user2flower_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -41,10 +41,10 @@ def user2flowerWithID(user2flower_id):
             pass
             return implementation.deleteUser2flowerByID(user2flower_id)
         else:
-            return "Check request again."
+            return "Check request again.", 403
     except Exception as e:
         print(e)
-        return "Something went wrong at /users2flowers/<int:user2flower_id>"
+        return "Something went wrong at /users2flowers/<int:user2flower_id>", 500
 
 
 if __name__ == '__main__':
