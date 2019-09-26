@@ -22,12 +22,12 @@ def getAllUsers2Flowers():
             conn.close()
             return payload
         else:
-            return 'No data to return.'
+            return {'msg': 'No data to return.'}
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return 'Something went wrong while fetching users with flowers.', 500
+        return {'msg': 'Something went wrong while fetching users with flowers.'}, 500
 
 
 def postUsers2Flowers(request):
@@ -39,13 +39,13 @@ def postUsers2Flowers(request):
 
         c.close()
         conn.close()
-        return "New user2flower added to DB.", 201
+        return {"msg": "New user2flower added to DB."}, 201
 
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while inserting user2flower to DB.", 500
+        return {"msg": "Something went wrong while inserting user2flower to DB."}, 500
 
 
 def getUser2flowerByID(user2flower_id):
@@ -71,7 +71,7 @@ def getUser2flowerByID(user2flower_id):
         c.close()
         conn.close()
         print(e)
-        return "Something went while fetching user2flower by id.", 500
+        return {"msg": "Something went wrong while fetching user2flower by id."}, 500
 
 
 def putUser2flowerByID(request, user2flower_id):
@@ -84,20 +84,20 @@ def putUser2flowerByID(request, user2flower_id):
         else:
             putData = putDataCheck(request, data)
             if putData == "Something went wrong in mapping data.":
-                return "Something went wrong in mapping data.", 500
+                return {"msg": "Something went wrong in mapping data."}, 500
             c.execute('UPDATE user2flower SET user2flower_id = %s, user_id = %s, flower_id = %s, date_of_inception = %s, email = %s WHERE user2flower_id = %s',(str(user2flower_id), putData[0], putData[1], putData[2], putData[3],  str(user2flower_id)))
             conn.commit()
             print("User2flower with user2flower_id " + str(user2flower_id) + " is updated.")
 
             c.close()
             conn.close()
-            return "User2flower with user2flower_id " + str(user2flower_id) + " is updated."
+            return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is updated."}
 
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while updating user2flower.", 500
+        return {"msg": "Something went wrong while updating user2flower."}, 500
 
 
 def deleteUser2flowerByID(user2flower_id):
@@ -106,7 +106,7 @@ def deleteUser2flowerByID(user2flower_id):
 
         data = getUser2flowerByID(user2flower_id)
         if data == "No data to return.":
-            return "User2flower with user2flower_id " + str(user2flower_id) + " does not exist in DB."
+            return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " does not exist in DB."}
         else:
             c.execute('DELETE FROM user2flower WHERE user2flower_id = %s', (str(user2flower_id)))
             conn.commit()
@@ -114,13 +114,13 @@ def deleteUser2flowerByID(user2flower_id):
 
             c.close()
             conn.close()
-            return "User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB."
+            return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB."}
 
     except Exception as e:
         c.close()
         conn.close()
         print(e)
-        return "Something went wrong while deleting user2flower", 500
+        return {"msg": "Something went wrong while deleting user2flower"}, 500
 
 
 def putDataCheck(request, data):
