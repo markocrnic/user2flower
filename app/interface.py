@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from schema import Schema, And, Use
 from flask_cors import CORS
 
@@ -18,7 +18,7 @@ def user2flowerGlobal():
     try:
         if request.method == 'GET':
             data = implementation.getAllUsers2Flowers()
-            return jsonify(data)
+            return data
         elif request.method == 'POST':
             try:
                 validated = schema.validate(request.json)
