@@ -1,4 +1,4 @@
-User2flower API for interacting with user table inside planthealthcare DB.
+User2flower API for interacting with user2flower table inside planthealthcare DB.
 CRUD operations exposed.
 GET all         /users2flowers/
 GET one         /users2flowers/<id>
