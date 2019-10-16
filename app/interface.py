@@ -30,7 +30,7 @@ def user2flowerGlobal():
         return {'msg': 'Something went wrong at /users2flowers/'}, 500
 
 
-@app.route('/users2flowers/<int:user2flower_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/users2flowers/<int:user2flower_id>/', methods=['GET', 'PUT', 'DELETE'])
 def user2flowerWithID(user2flower_id):
     try:
         if request.method == 'GET':
