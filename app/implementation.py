@@ -1,32 +1,47 @@
 from dbquery import querydb
+from schema import Schema, And, Use
 
 
 def getAllUsers2Flowers():
-
     data = 'SELECT * FROM user2flower'
     return querydb(data, operation='GET', check='list')
 
 
 def postUsers2Flowers(request):
-
-    return querydb("", operation='POST', request=request)
+    data = "INSERT INTO user2flower (user_id, flower_id, date_of_inception, email) values ('" + str(
+        request.json['user_id']) + "', '" + str(request.json['flower_id']) + "', '" + str(
+        request.json['date_of_inception']) + "', '" + str(request.json['email']) + "')"
+    return querydb(data, operation='POST')
 
 
 def getUser2flowerByID(user2flower_id):
-
     data = 'SELECT * FROM user2flower where user2flower_id = ' + str(user2flower_id)
     return querydb(data, 'GET', 'tuple', user2flower_id=user2flower_id)
 
 
 def putUser2flowerByID(request, user2flower_id):
+    data = getUser2flowerByID(user2flower_id)
+    if data == "No data to return.":
+        return postUsers2Flowers(request)
+    else:
+        putData = putDataCheck(request, data)
+        if putData == "Something went wrong in mapping data.":
+            return {"msg": "Something went wrong in mapping data."}, 500
 
-    return querydb("", 'PUT', user2flower_id=user2flower_id, request=request)
+        data = "UPDATE user2flower SET user2flower_id = '" + str(user2flower_id) + "', user_id = '" + putData[
+            0] + "', flower_id = '" + putData[1] + "', date_of_inception = '" + putData[2] + "', email = '" + str(putData[
+                   3]) + "' WHERE user2flower_id = '" + str(user2flower_id) + "'"
+        return querydb(data, 'PUT', user2flower_id=user2flower_id)
 
 
 def deleteUser2flowerByID(user2flower_id):
 
-    data = 'DELETE FROM user2flower WHERE user2flower_id = ' + (str(user2flower_id))
-    return querydb(data, 'DELETE', user2flower_id=user2flower_id)
+    data = getUser2flowerByID(user2flower_id)
+    if data == "No data to return.":
+        return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " does not exist in DB."}
+    else:
+        data = 'DELETE FROM user2flower WHERE user2flower_id = ' + (str(user2flower_id))
+        return querydb(data, 'DELETE', user2flower_id=user2flower_id)
 
 
 def putDataCheck(request, data):
@@ -52,3 +67,9 @@ def putDataCheck(request, data):
     except:
         return "Something went wrong in mapping data."
 
+
+def getSchema():
+    return Schema({'user_id': And(Use(int)),
+                   'flower_id': And(Use(int)),
+                   'date_of_inception': And(str, len),
+                   'email': And(Use(bool))})

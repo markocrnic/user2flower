@@ -11,9 +11,7 @@ def querydb(data, operation, check=None, user2flower_id=None, request=None):
 
         if operation == 'POST':
 
-            c.execute('INSERT INTO user2flower (user_id, flower_id, date_of_inception, email) values (%s, %s, %s, %s)',
-                      (str(request.json['user_id']), str(request.json['flower_id']),
-                       str(request.json['date_of_inception']), str(request.json['email'])))
+            c.execute(data)
             conn.commit()
 
             c.close()
@@ -60,36 +58,23 @@ def querydb(data, operation, check=None, user2flower_id=None, request=None):
 
         if operation == 'PUT':
 
-            data = operations.getUser2flowerByID(user2flower_id)
-            if data == "No data to return.":
-                return operations.postUsers2Flowers(request)
-            else:
-                putData = operations.putDataCheck(request, data)
-                if putData == "Something went wrong in mapping data.":
-                    return {"msg": "Something went wrong in mapping data."}, 500
-                c.execute(
-                    'UPDATE user2flower SET user2flower_id = %s, user_id = %s, flower_id = %s, date_of_inception = %s, email = %s WHERE user2flower_id = %s',
-                    (str(user2flower_id), putData[0], putData[1], putData[2], putData[3], str(user2flower_id)))
-                conn.commit()
-                print("User2flower with user2flower_id " + str(user2flower_id) + " is updated.")
+            c.execute(data)
+            conn.commit()
+            print("User2flower with user2flower_id " + str(user2flower_id) + " is updated.")
 
-                c.close()
-                conn.close()
-                return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is updated."}
+            c.close()
+            conn.close()
+            return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is updated."}
 
         if operation == 'DELETE':
 
-            data = operations.getUser2flowerByID(user2flower_id)
-            if data == "No data to return.":
-                return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " does not exist in DB."}
-            else:
-                c.execute('DELETE FROM user2flower WHERE user2flower_id = ' + (str(user2flower_id)))
-                conn.commit()
-                print("User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB.")
+            c.execute(data)
+            conn.commit()
+            print("User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB.")
 
-                c.close()
-                conn.close()
-                return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB."}
+            c.close()
+            conn.close()
+            return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB."}
 
     except Exception as e:
         c.close()
