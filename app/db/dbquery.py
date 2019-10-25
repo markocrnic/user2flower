@@ -1,9 +1,8 @@
-from dbconnect import connection
+from db.dbconnect import connection
 from flask import jsonify
-import implementation as operations
 
 
-def querydb(data, operation, check=None, user2flower_id=None, request=None):
+def querydb(data, operation, check=None, user2flower_id=None):
     try:
         c, conn = connection()
         if c == {'msg': 'Circuit breaker is open, reconnection in porgress'}:
