@@ -42,5 +42,16 @@ def user2flowerWithID(user2flower_id):
         return {"msg": "Something went wrong at /users2flowers/<int:user2flower_id>"}, 500
 
 
+@app.route('/users2flowers/user/<int:user_id>/', methods=['GET'])
+def usersFlowersByUserID(user_id):
+    try:
+        if request.method == 'GET':
+            return implementation.getUsersFlowersByUserID(user_id)
+        else:
+            return {"msg": "Check request again."}, 403
+    except Exception as e:
+        print(e)
+        return {"msg": "Something went wrong at /users2flowers/<int:user_id>"}, 500
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

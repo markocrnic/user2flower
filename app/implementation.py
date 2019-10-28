@@ -49,6 +49,12 @@ def deleteUser2flowerByID(user2flower_id):
         return querydb(data, 'DELETE', user2flower_id=user2flower_id)
 
 
+def getUsersFlowersByUserID(user_id):
+
+    data = 'SELECT * FROM user2flower where user_id=' + str(user_id)
+    return getAllUsers2Flowers(data)
+
+
 def putDataCheck(request, data):
     try:
         listData = []
