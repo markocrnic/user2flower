@@ -2,16 +2,21 @@ from db.dbquery import querydb
 from schema import Schema, And, Use
 
 
-def getAllUsers2Flowers():
-    data = 'SELECT * FROM user2flower'
+def getAllUsers2Flowers(data=None):
+    if data is None:
+        data = 'SELECT * FROM user2flower'
     return querydb(data, operation='GET', check='list')
 
 
 def postUsers2Flowers(request):
-    data = "INSERT INTO user2flower (user_id, flower_id, date_of_inception, email) values ('" + str(
-        request.json['user_id']) + "', '" + str(request.json['flower_id']) + "', '" + str(
-        request.json['date_of_inception']) + "', '" + str(request.json['email']) + "')"
-    return querydb(data, operation='POST')
+    checkQuery = 'SELECT * FROM user2flower WHERE user_id=' + str(request.json['user_id']) + ' AND flower_id=' + str(request.json['flower_id'])
+    if getAllUsers2Flowers(checkQuery) == {'msg': 'No data to return.'}:
+        data = "INSERT INTO user2flower (user_id, flower_id, date_of_inception, email) values ('" + str(
+            request.json['user_id']) + "', '" + str(request.json['flower_id']) + "', '" + str(
+            request.json['date_of_inception']) + "', '" + str(request.json['email']) + "')"
+        return querydb(data, operation='POST')
+    else:
+        return {'msg': 'That entry already exists in DB.'}
 
 
 def getUser2flowerByID(user2flower_id):
