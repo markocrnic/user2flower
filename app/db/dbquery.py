@@ -9,12 +9,7 @@ def querydb(data, operation, check=None, user2flower_id=None):
             return c, 500
 
         if operation == 'POST':
-
-            c.execute(data)
-            conn.commit()
-
-            c.close()
-            conn.close()
+            executeQuery(c, conn, data)
             return {"msg": "New user2flower added to DB."}, 201
 
         if operation == 'GET':
@@ -37,6 +32,8 @@ def querydb(data, operation, check=None, user2flower_id=None):
                     conn.close()
                     return jsonify(payload)
                 else:
+                    c.close()
+                    conn.close()
                     return {'msg': 'No data to return.'}
 
             if check == 'tuple':
@@ -56,23 +53,11 @@ def querydb(data, operation, check=None, user2flower_id=None):
                     return "No data to return."
 
         if operation == 'PUT':
-
-            c.execute(data)
-            conn.commit()
-            print("User2flower with user2flower_id " + str(user2flower_id) + " is updated.")
-
-            c.close()
-            conn.close()
+            executeQuery(c, conn, data)
             return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is updated."}
 
         if operation == 'DELETE':
-
-            c.execute(data)
-            conn.commit()
-            print("User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB.")
-
-            c.close()
-            conn.close()
+            executeQuery(c, conn, data)
             return {"msg": "User2flower with user2flower_id " + str(user2flower_id) + " is deleted from DB."}
 
     except Exception as e:
@@ -80,3 +65,11 @@ def querydb(data, operation, check=None, user2flower_id=None):
         conn.close()
         print(e)
         return {'msg': 'Something went wrong while executing ' + operation + ' operation on users2flowers.'}, 500
+
+
+def executeQuery(c, conn, data):
+    c.execute(data)
+    conn.commit()
+
+    c.close()
+    conn.close()
